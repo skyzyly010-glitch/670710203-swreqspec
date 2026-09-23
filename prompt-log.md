@@ -23,3 +23,14 @@
 - ผลการทดสอบ: `T-01 schema check passed` จากการสร้างฐานข้อมูล SQLite ในหน่วยความจำและตรวจตาราง/คอลัมน์
 - สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่พบประเด็นที่ต้องถามเพิ่ม; รูปแบบหมายเลขคิวยังคงเว้นไว้ตาม Q-02
 - สถานะ task: T-01 เปลี่ยนเป็น `เสร็จ รอทีมตรวจ`
+
+---
+
+## 2569-09-23 คำสั่ง: /implement T-14
+
+- เครื่องมือ: Copilot ใน Codespaces
+- ไฟล์ที่สร้างหรือแก้: `frontend/src/pages/SlotPicker.jsx`, `frontend/src/App.jsx`, `frontend/src/__tests__/slot-picker.test.jsx`
+- ผลการทดสอบ: test เฉพาะ T-14 ผ่าน 2 tests; test frontend ทั้งหมดผ่าน 3 tests; `npm run build` ผ่าน
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่พบประเด็นจาก spec/plan ที่ต้องถามเพิ่ม; ใช้ API จำลองตาม plan และไม่ต่อ API จริงใน T-14
+- หมายเหตุ: ชุด test ทั้งหมดมี React `act(...)` warning จาก smoke test เดิมที่ไม่รอการโหลดแบบ asynchronous แต่ test ผ่าน
+- สถานะ task: T-14 เปลี่ยนเป็น `เสร็จ รอทีมตรวจ`
