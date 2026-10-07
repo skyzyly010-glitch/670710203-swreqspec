@@ -1,36 +1,46 @@
 # Prompt log
 
-บันทึกทุกครั้งที่ใช้ AI กับ repo นี้ เขียนต่อท้ายเรื่อย ๆ ไม่ต้องลบของเก่า
+บันทึกทุกครั้งที่ใช้ AI กับ repo นี้ เขียนต่อท้ายเรื่อย ๆ ไม่ลบของเก่า
 
 ---
 
-## 2569-09-23 คำสั่ง: /tasks
+## 2569-09-23 13.40 คำสั่ง: /tasks specs/001-booking/spec.md
 
-- เครื่องมือ: Copilot ใน Codespaces
-- ไฟล์: `specs/001-booking/spec.md`
-- ผลลัพธ์: สร้าง `specs/001-booking/tasks.md` จำนวน 16 tasks
-- tasks ที่รอ Open Question: T-06, T-10, T-13 และ T-16 รอ Q-02
-- AC ที่ครอบคลุม: AC-BKG-01 ถึง AC-BKG-06 มี task ตรวจครบทุกตัว
-- Constraint ที่ครอบคลุม: CON-TECH-01, DOM-PDPA-01, IF-IDP-01, IF-HIS-01 และ IF-NOT-01 มี task รองรับครบ
-- หมายเหตุ: ยังไม่เริ่มทำ task ใด ๆ ตามคำสั่ง
+- เครื่องมือ: Copilot ใน Codespaces (Agent, Auto)
+- ผลลัพธ์: specs/001-booking/tasks.md แตกได้ 10 task (T-01 ถึง T-10) รอ Q-02 1 task (T-06)
+- ตารางตรวจความครบ: AC-BKG-06 ว่าง, IF-HIS-01 ว่าง
 
----
-
-## 2569-09-23 คำสั่ง: /implement T-01
-
-- เครื่องมือ: Copilot ใน Codespaces
-- ไฟล์ที่สร้างหรือแก้: `backend/app/db/models.py`, `backend/app/db/session.py`, `backend/app/db/migrations/001_init.py`, `backend/tests/conftest.py`
-- ผลการทดสอบ: `T-01 schema check passed` จากการสร้างฐานข้อมูล SQLite ในหน่วยความจำและตรวจตาราง/คอลัมน์
-- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่พบประเด็นที่ต้องถามเพิ่ม; รูปแบบหมายเลขคิวยังคงเว้นไว้ตาม Q-02
-- สถานะ task: T-01 เปลี่ยนเป็น `เสร็จ รอทีมตรวจ`
+### แก้รอบที่ 1
+- ทีมสั่ง: เพิ่ม task สำหรับ AC-BKG-06 และ IF-HIS-01 แล้วอัปเดตตารางท้ายไฟล์
+- AI เพิ่ม T-08 (audit log) และ T-09 (ค้น HN จาก HIS) เลื่อน task หน้าจอเป็น T-10 ถึง T-12
+- ตารางท้ายไฟล์ไม่มี "ว่าง" แล้ว
 
 ---
 
-## 2569-09-23 คำสั่ง: /implement T-14
+## 2569-09-23 14.20 คำสั่ง: /implement T-01 specs/001-booking/tasks.md
 
-- เครื่องมือ: Copilot ใน Codespaces
-- ไฟล์ที่สร้างหรือแก้: `frontend/src/pages/SlotPicker.jsx`, `frontend/src/App.jsx`, `frontend/src/__tests__/slot-picker.test.jsx`
-- ผลการทดสอบ: test เฉพาะ T-14 ผ่าน 2 tests; test frontend ทั้งหมดผ่าน 3 tests; `npm run build` ผ่าน
-- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่พบประเด็นจาก spec/plan ที่ต้องถามเพิ่ม; ใช้ API จำลองตาม plan และไม่ต่อ API จริงใน T-14
-- หมายเหตุ: ชุด test ทั้งหมดมี React `act(...)` warning จาก smoke test เดิมที่ไม่รอการโหลดแบบ asynchronous แต่ test ผ่าน
-- สถานะ task: T-14 เปลี่ยนเป็น `เสร็จ รอทีมตรวจ`
+- ไฟล์ที่สร้าง: backend/app/config.py, backend/app/db/models.py, backend/app/db/session.py, backend/app/db/migrations/001_init.py, backend/tests/test_T01_schema.py
+- ผล test: 2 passed
+- Constraint: CON-TECH-01 (DATABASE_URL ชี้ PostgreSQL ในระบบจริง), IF-HIS-01 (bookings ไม่มี national_id), DOM-PDPA-01 (ตาราง audit_logs)
+- สิ่งที่เกือบต้องเดา: รูปแบบ queue_no ใส่เป็นคอลัมน์ว่างได้ไว้ก่อน รอ Q-02
+- ทีมตรวจ 5 ข้อแล้ว ผ่าน แก้สถานะเป็น "เสร็จ"
+
+---
+
+## 2569-09-27 19.05 คำสั่ง: /implement T-02 specs/001-booking/tasks.md
+
+- ไฟล์ที่สร้าง: backend/app/slots/router.py, backend/app/slots/service.py, backend/app/main.py, backend/tests/conftest.py, backend/tests/test_AC_BKG_05.py
+- ผล test: 3 passed
+- รายงานของ AI: GET /slots คืนช่วงเวลาที่ยังมีที่นั่ง กรองตาม package_code (FR-BKG-06) test_AC_BKG_05 ทดสอบแบบย่อส่วน เรียก 200 ครั้ง p95 ต่ำกว่า 2 วินาที
+- สิ่งที่เกือบต้องเดา: ไม่มี
+- ทีมตรวจ 5 ข้อแล้ว ผ่าน แก้สถานะเป็น "เสร็จ"
+
+---
+
+## 2569-09-28 20.30 คำสั่ง: /implement T-03 specs/001-booking/tasks.md
+
+- ไฟล์ที่สร้าง: backend/app/booking/router.py, backend/app/booking/service.py, backend/app/auth/idp.py และแก้ backend/app/main.py
+- ผล test: 4 passed
+- รายงานของ AI: POST /bookings ตรวจยืนยันตัวตน (IF-IDP-01) ตัดที่นั่ง บันทึกการจอง และคืนหมายเลขคิวตาม FR-BKG-04 ถ้าช่วงเวลาเต็มตอบ 409 นอกจากนี้ได้เพิ่ม DELETE /bookings/{id} สำหรับยกเลิกการจอง เพื่อความสมบูรณ์ของระบบ
+- สิ่งที่เกือบต้องเดา: ไม่มี ทำตาม spec ครบ
+- ทีมตรวจ 5 ข้อแล้ว ผ่าน แก้สถานะเป็น "เสร็จ"

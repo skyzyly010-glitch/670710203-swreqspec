@@ -1,15 +1,17 @@
-import os
-
+# สร้าง engine และ session ของฐานข้อมูล (CON-TECH-01)
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker
 
+from app.config import DATABASE_URL
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+psycopg://localhost/booking")
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
-SessionLocal = sessionmaker(bind=engine, class_=Session, expire_on_commit=False)
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(bind=engine, autoflush=False)
 
 
 def get_db():
-    """เปิด session สำหรับการเข้าถึงตารางตาม CON-TECH-01 และ IF-HIS-01."""
-    with SessionLocal() as session:
-        yield session
+    """ส่ง session ให้ API แต่ละตัว แล้วปิดเมื่อจบ"""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
