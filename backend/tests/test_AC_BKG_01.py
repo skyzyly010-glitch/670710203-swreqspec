@@ -10,3 +10,12 @@ def test_AC_BKG_01(client, make_slot):
     res = client.post("/bookings", json={"slot_id": slot.id}, headers=AUTH)
 
     assert res.status_code == 201
+
+
+def test_AC_BKG_01_full_slot_rejected(client, make_slot):
+    """AC-BKG-01: เมื่อช่วงเวลาเต็มแล้ว ควรปฏิเสธการจองและไม่สร้างรายการใหม่"""
+    slot = make_slot(start="09:00", remaining=0)
+
+    res = client.post("/bookings", json={"slot_id": slot.id}, headers=AUTH)
+
+    assert res.status_code == 409
